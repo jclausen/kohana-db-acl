@@ -28,10 +28,10 @@ class ACL_Model_Role extends Model_Auth_Role
 			return false;
 		}
 		// The ADMIN role is all-powerful
-		if ($this->get_user()->role->find()->pk() == self::ADMIN) {
+		if ($this->get_user()->roles->find()->pk() == self::ADMIN) {
 			return true;
 		}
 
-		return $this->get_user()->role->find()->permissions->where('name','=',$permission)->find()->loaded();
+		return $this->get_user()->roles->find()->permissions->where('name','=',$permission)->find()->loaded();
 	}
 }
