@@ -7,7 +7,7 @@ class ACL_Model_Role extends Model_Auth_Role
 {
 	// Basic Role constants
 	const LOGIN = 1; // Allow login
-	const ADMIN = 2; // Never-ever give this role to daily system users! Only for developers.
+	const ADMIN = 1000; // Never-ever give this role to daily system users! Only for developers.
 
 	protected $_has_many = [
 		'permissions' => ['through' => 'permissions_roles'],
@@ -23,15 +23,15 @@ class ACL_Model_Role extends Model_Auth_Role
 	 */
 	public function can($permission)
 	{
-		if (! $this->loaded()) {
+		
+		if (!$this->logged_in()) {
 			return false;
 		}
-
 		// The ADMIN role is all-powerful
-		if ($this->pk() == self::ADMIN) {
+		if ($this->get_user()->role->find()->pk() == self::ADMIN) {
 			return true;
 		}
 
-		return $this->has('permissions', $permission);
+		return $this->get_user()->role->find()->permissions->where('name','=',$permission)->find()->loaded();
 	}
 }
