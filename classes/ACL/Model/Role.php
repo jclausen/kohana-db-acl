@@ -24,11 +24,11 @@ class ACL_Model_Role extends Model_Auth_Role
 	public function can($permission)
 	{
 		
-		if (!$this->logged_in()) {
+		if (!Auth::instance()->logged_in()) {
 			return false;
 		}
 		// The ADMIN role is all-powerful
-		if ($this->get_user()->roles->find()->pk() == self::ADMIN) {
+		if (Auth::instance()->get_user()->roles->find()->pk() == self::ADMIN) {
 			return true;
 		}
 
