@@ -64,8 +64,14 @@ trait ACL_Trait_User
 	 */
 	private function _check_permission($permission)
 	{
-		if (! is_int($permission) && ! $permission instanceof ACL_Model_Permission) {
-			throw new InvalidArgumentException('Expected an instance of ACL_Model_Permission or an integer.');
+		if(is_string($permission)){
+			$permission=ORM::factory('Permission')->where('name','=',$permission)->find();
+		} elseif (is_numeric($permission)){
+			$permission=ORM::factory('Permission',$permission);
+		}
+		
+		if (! $permission instanceof ACL_Model_Permission && $permission->loaded()) {
+			throw new InvalidArgumentException('Expected an instance of ACL_Model_Permission');
 		}
 
 		// Todo: Do this with one DB::select query
