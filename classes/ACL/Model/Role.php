@@ -31,7 +31,10 @@ class ACL_Model_Role extends Model_Auth_Role
 		if (Auth::instance()->get_user()->roles->find()->pk() == self::ADMIN) {
 			return true;
 		}
-
-		return $this->get_user()->roles->find()->permissions->where('name','=',$permission)->find()->loaded();
+		foreach(Auth::instance()->get_user()->roles->find_all() as $role){
+			if($role->permissions->where('name','=',$permission)->find()->loaded())
+				return true;
+		}
+		return false;
 	}
 }
