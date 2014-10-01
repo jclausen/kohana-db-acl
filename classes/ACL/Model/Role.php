@@ -9,10 +9,10 @@ class ACL_Model_Role extends Model_Auth_Role
 	const LOGIN = 1; // Allow login
 	const ADMIN = 1000; // Never-ever give this role to daily system users! Only for developers.
 
-	protected $_has_many = [
+	protected $_has_many = array(
 		'permissions' => array('through' => 'permissions_roles'),
 		'users'       => array('through' => 'roles_users')
-	];
+	);
 
 	/**
 	 * Check whether the current role can do some action.
