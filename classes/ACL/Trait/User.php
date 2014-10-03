@@ -64,16 +64,6 @@ trait ACL_Trait_User
 	 */
 	private function _check_permission($permission)
 	{
-		if(is_string($permission)){
-			$permission=ORM::factory('Permission')->where('name','=',$permission)->find();
-		} elseif (is_numeric($permission)){
-			$permission=ORM::factory('Permission',$permission);
-		}
-		
-		if (! $permission instanceof ACL_Model_Permission && $permission->loaded()) {
-			throw new InvalidArgumentException('Expected an instance of ACL_Model_Permission');
-		}
-
 		// Todo: Do this with one DB::select query
 		foreach ($this->roles->find_all() as $role) {
 			if ($role->can($permission)) {
