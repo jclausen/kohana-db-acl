@@ -54,9 +54,9 @@ trait ACL_Trait_User
 	}
 
 	/**
-	 * Check if a user has the specified permission.
+	 * Check if a user has the specified permissions.
 	 *
-	 * @param int $permission
+	 * @param array|string $permission
 	 * @throws InvalidArgumentException
 	 * @see Model_Permission
 	 * @return bool
@@ -66,7 +66,12 @@ trait ACL_Trait_User
 	{
 		// Todo: Do this with one DB::select query
 		foreach ($this->roles->find_all() as $role) {
-			if ($role->can($permission)) {
+			if(is_array($permission)){
+				foreach($permission as $checked){
+					if($role->can($checked))
+						return TRUE;
+				}
+			} elseif ($role->can($permission)) {
 				return TRUE;
 			}
 		}
